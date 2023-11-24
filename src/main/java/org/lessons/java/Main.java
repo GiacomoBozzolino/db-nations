@@ -13,7 +13,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		Scanner in= new Scanner(System.in);
-		System.out.print("Filtre i paesi per nome?: ");
+		System.out.print("Filtra i paesi per nome?: ");
 		String strName = in.nextLine();
 		
 	
@@ -52,6 +52,7 @@ public class Main {
 		  
 		  System.out.print("Inserisci l'id di una country per ulteriori informazioni: ");
           int selectedCountryId = in.nextInt();
+          in.close();
 
           // Query per ottenere tutte le lingue parlate in quella country
           final String languagesSql = "SELECT languages.language "
@@ -59,6 +60,7 @@ public class Main {
                   + "JOIN country_languages ON countries.country_id = country_languages.country_id "
                   + "JOIN languages ON country_languages.language_id = languages.language_id "
                   + "WHERE countries.country_id = ?";
+          
           try (PreparedStatement languagesPs = con.prepareStatement(languagesSql)) {
               languagesPs.setInt(1, selectedCountryId);
 
@@ -78,6 +80,7 @@ public class Main {
                   + "WHERE countries.country_id = ? "
                   + "ORDER BY country_stats.year DESC "
                   + "LIMIT 1";
+          
           try (PreparedStatement statsPs = con.prepareStatement(statsSql)) {
               statsPs.setInt(1, selectedCountryId);
 
