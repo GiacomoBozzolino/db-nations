@@ -12,6 +12,10 @@ public class Main {
 	private static final String pws = "";
 	
 	public static void main(String[] args) {
+		Scanner in= new Scanner(System.in);
+		System.out.print("Filtre i paesi per nome?: ");
+		String strName = in.nextLine();
+		
 	
 		try (Connection con 
 		      = DriverManager.getConnection(url, user, pws)) {  
@@ -22,10 +26,12 @@ public class Main {
 						 +" ON countries.region_id = regions.region_id "
 						 +" JOIN continents"
 						 +" ON regions.continent_id = continents.continent_id "
+						 + "WHERE countries.name LIKE ?"
 						 + " ORDER BY countries.name ASC"
 						 +" ; ";  
 		  
 		  try(PreparedStatement ps = con.prepareStatement(sql)){
+			  ps.setString(1, "%" + strName + "%");
 		    try(ResultSet rs = ps.executeQuery()){
 		    	
 		    	while(rs.next()) {
